@@ -38,9 +38,8 @@ if __name__ == '__main__':
 
         print(name)
 
-    AA
     model.fc = torch.nn.Linear(512, 2)
-    model = model.to('mps')
+    model = model.to('cuda')
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adadelta(model.fc.parameters(), lr=1.0)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer=optimizer, step_size=2, gamma=0.5)
@@ -62,8 +61,8 @@ if __name__ == '__main__':
         running_corrects = 0 
 
         for i, (inputs, labels) in enumerate(train_dataloader):
-            inputs = inputs.to('mps')
-            labels = labels.to('mps') 
+            inputs = inputs.to('cuda')
+            labels = labels.to('cuda') 
 
             optimizer.zero_grad()
             outputs = model(inputs)
@@ -88,8 +87,8 @@ if __name__ == '__main__':
             running_loss = 0.
             running_corrects = 0
             for inputs, labels in test_dataloader:
-                inputs = inputs.to('mps')
-                labels = labels.to('mps')
+                inputs = inputs.to('cuda')
+                labels = labels.to('cuda')
                 outputs = model(inputs)
                 _, preds = torch.max(outputs, 1)
                 loss = criterion(outputs, labels)
@@ -111,13 +110,13 @@ if __name__ == '__main__':
     pyplot.ylabel('Accuracy')
     pyplot.legend(['Train','Test'])
     pyplot.title('Train vs Test Accuracy over time')
-    pyplot.show()
+    pyplot.savefig('accuracy_resnet18.png')
 
     pyplot.figure(figsize=(6,6))
     pyplot.plot(numpy.arange(1,num_epochs+1), train_loss,'-o')
     pyplot.plot(numpy.arange(1,num_epochs+1), test_loss,'-o')
     pyplot.xlabel('Epoch')
-    pyplot.ylabel('Accuracy')
+    pyplot.ylabel('Loss')
     pyplot.legend(['Train','Test'])
-    pyplot.title('Train vs Test Accuracy over time')
-    pyplot.show()
+    pyplot.title('Train vs Test Loss over time')
+    pyplot.savefig('loss_resnet18.png')
