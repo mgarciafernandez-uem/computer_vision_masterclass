@@ -77,7 +77,7 @@ if __name__ == '__main__':
     test_loader = torch.utils.data.DataLoader(dataset2, batch_size=64)
 
     model = CNN().to(device)
-    optimizer = optim.Adadelta(model.parameters(), lr=1.0)
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
 
     loss_list = list()
     accuracy_list = list()
